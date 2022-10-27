@@ -1,2 +1,6 @@
 test
 source/ddrescueview
+*.o
+*.ppu
+*.rsj
+*.or
