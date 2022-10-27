@@ -1,0 +1,121 @@
+object BlockForm: TBlockForm
+  Left = 798
+  Height = 289
+  Top = 703
+  Width = 468
+  BorderIcons = [biSystemMenu]
+  Caption = 'Block inspector'
+  ClientHeight = 289
+  ClientWidth = 468
+  Constraints.MinHeight = 160
+  Constraints.MinWidth = 330
+  FormStyle = fsStayOnTop
+  Position = poMainFormCenter
+  ShowHint = True
+  LCLVersion = '0.9.30.2'
+  object Panel2: TPanel
+    Left = 8
+    Height = 24
+    Top = 4
+    Width = 452
+    Anchors = [akTop, akLeft, akRight]
+    BevelOuter = bvNone
+    ClientHeight = 24
+    ClientWidth = 452
+    TabOrder = 2
+    object BlockEdit: TSpinEdit
+      Left = 88
+      Height = 24
+      Top = 0
+      Width = 58
+      Align = alLeft
+      Anchors = []
+      BorderSpacing.Left = 4
+      OnChange = BlockEditChange
+      TabOrder = 0
+    end
+    object BlockHeadline: TLabel
+      Left = 0
+      Height = 24
+      Top = 0
+      Width = 84
+      Align = alLeft
+      BorderSpacing.CellAlignVertical = ccaCenter
+      Caption = 'Contents of block'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object TrackActiveCheckBox: TCheckBox
+      Left = 330
+      Height = 17
+      Hint = 'Always show the block containing current_pos'
+      Top = 4
+      Width = 121
+      Anchors = [akRight]
+      Caption = 'Track current position'
+      TabOrder = 1
+    end
+  end
+  object BlockGrid: TStringGrid
+    Left = 8
+    Height = 216
+    Top = 32
+    Width = 452
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    AutoFillColumns = True
+    ColCount = 3
+    Columns = <    
+      item
+        MinSize = 80
+        MaxSize = 100
+        SizePriority = 0
+        Title.Caption = 'Status'
+        Width = 90
+      end    
+      item
+        MinSize = 130
+        MaxSize = 300
+        Title.Caption = 'Start'
+        Width = 179
+      end    
+      item
+        MinSize = 130
+        MaxSize = 300
+        Title.Caption = 'Length'
+        Width = 179
+      end>
+    DefaultColWidth = 80
+    DefaultRowHeight = 16
+    ExtendedSelect = False
+    FixedCols = 0
+    MouseWheelOption = mwGrid
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect, goThumbTracking, goSmoothScroll]
+    RowCount = 1
+    TabOrder = 1
+    UseXORFeatures = True
+    ColWidths = (
+      90
+      179
+      179
+    )
+  end
+  object CloseBIButton: TButton
+    Left = 384
+    Height = 25
+    Top = 256
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Caption = 'Close'
+    OnClick = CloseBIButtonClick
+    TabOrder = 0
+  end
+  object posLabel: TLabel
+    Left = 8
+    Height = 14
+    Top = 264
+    Width = 89
+    Anchors = [akLeft, akBottom]
+    Caption = '> Current position: '
+    ParentColor = False
+  end
+end

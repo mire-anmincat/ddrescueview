@@ -1,0 +1,450 @@
+object MainForm: TMainForm
+  Left = 1130
+  Height = 487
+  Top = 266
+  Width = 629
+  AllowDropFiles = True
+  Caption = 'ddrescue log viewer'
+  ClientHeight = 467
+  ClientWidth = 629
+  Color = clBtnFace
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 620
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Menu = MainMenu1
+  OnCreate = FormCreate
+  OnDropFiles = FormDropFiles
+  OnResize = FormResize
+  Position = poScreenCenter
+  ShowHint = True
+  LCLVersion = '0.9.30.2'
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 444
+    Width = 629
+    Panels = <    
+      item
+        Text = 'No file loaded'
+        Width = 125
+      end    
+      item
+        Text = 'Input size:'
+        Width = 130
+      end    
+      item
+        Text = 'Position:'
+        Width = 125
+      end    
+      item
+        Text = 'Rescued:'
+        Width = 125
+      end    
+      item
+        Text = 'Error size:'
+        Width = 140
+      end>
+    ParentShowHint = False
+    SimplePanel = False
+    ShowHint = True
+  end
+  object AppLog: TMemo
+    Left = 0
+    Height = 89
+    Top = 0
+    Width = 192
+    Anchors = [akTop, akLeft, akRight]
+    Color = cl3DLight
+    ReadOnly = True
+    ScrollBars = ssBoth
+    TabOrder = 1
+  end
+  object GridPanel: TPanel
+    Left = 0
+    Height = 357
+    Top = 88
+    Width = 629
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvNone
+    BorderStyle = bsSingle
+    ClientHeight = 353
+    ClientWidth = 625
+    Color = clGray
+    ParentColor = False
+    TabOrder = 2
+    object BlockImage: TImage
+      Left = 0
+      Height = 352
+      Top = 0
+      Width = 622
+      OnMouseDown = BlockImageMouseDown
+    end
+  end
+  object BlockInfo: TGroupBox
+    Left = 200
+    Height = 73
+    Top = 8
+    Width = 353
+    Anchors = [akTop, akRight]
+    Caption = 'Block info'
+    ClientHeight = 55
+    ClientWidth = 349
+    TabOrder = 3
+    object ShapeFinished: TShape
+      Left = 6
+      Height = 10
+      Top = 2
+      Width = 10
+      Brush.Color = clLime
+    end
+    object ShapeNonTried: TShape
+      Left = 6
+      Height = 10
+      Top = 18
+      Width = 10
+      Brush.Color = clGray
+    end
+    object ShapeBad: TShape
+      Left = 6
+      Height = 10
+      Top = 34
+      Width = 10
+      Brush.Color = clRed
+    end
+    object ShapeNonSplit: TShape
+      Left = 102
+      Height = 10
+      Top = 2
+      Width = 10
+      Brush.Color = clBlue
+    end
+    object ShapeNonTrimmed: TShape
+      Left = 102
+      Height = 10
+      Top = 18
+      Width = 10
+      Brush.Color = clYellow
+    end
+    object lblRescued: TLabel
+      Left = 22
+      Height = 14
+      Hint = 'Blocks that have been successfully read'
+      Top = 2
+      Width = 44
+      Caption = 'Rescued'
+      ParentColor = False
+    end
+    object lblNonTried: TLabel
+      Left = 22
+      Height = 14
+      Hint = 'Blocks that have not yet been attempted to read'
+      Top = 18
+      Width = 44
+      Caption = 'Non-tried'
+      ParentColor = False
+    end
+    object lblBad: TLabel
+      Left = 22
+      Height = 14
+      Hint = 'Sectors that failed to read on the last attempt. May only become readable with --retrim and a lot of luck.'
+      Top = 34
+      Width = 63
+      Caption = 'Bad sector(s)'
+      ParentColor = False
+    end
+    object lblNonSplit: TLabel
+      Left = 118
+      Height = 14
+      Hint = 'Trimmed blocks that have yet to be split into two halves. This block may contain readable data.'
+      Top = 2
+      Width = 42
+      Caption = 'Non-split'
+      ParentColor = False
+    end
+    object lblNonTrimmed: TLabel
+      Left = 118
+      Height = 14
+      Hint = 'Block that was skipped by ddrescue on a read error to maximize performance. The next step is to trim this block (read backwards from the end of the block until a bad sector is found). May still contain good data.'
+      Top = 18
+      Width = 60
+      Caption = 'Non-trimmed'
+      ParentColor = False
+    end
+    object ShapeActive: TShape
+      Left = 102
+      Height = 10
+      Top = 34
+      Width = 10
+      Brush.Color = clBtnFace
+      Pen.Color = clAqua
+    end
+    object lblActive: TLabel
+      Left = 118
+      Height = 14
+      Hint = 'Shows ddrescue''s current read position on the source device. '
+      Top = 34
+      Width = 74
+      Caption = 'Current position'
+      ParentColor = False
+    end
+    object posLabel: TLabel
+      Left = 215
+      Height = 14
+      Top = 2
+      Width = 41
+      Caption = 'Position:'
+      ParentColor = False
+    end
+    object lblBlockPos: TLabel
+      Left = 214
+      Height = 14
+      Top = 18
+      Width = 42
+      Caption = '0 B - 0 B'
+      ParentColor = False
+    end
+    object BICheckBox: TCheckBox
+      Left = 214
+      Height = 17
+      Top = 34
+      Width = 113
+      Caption = 'Use Block inspector'
+      Checked = True
+      OnChange = BICheckBoxChange
+      State = cbChecked
+      TabOrder = 0
+    end
+  end
+  object PieImage: TImage
+    Left = 560
+    Height = 64
+    Top = 16
+    Width = 64
+    Anchors = [akTop, akRight]
+  end
+  object MainMenu1: TMainMenu
+    object File1: TMenuItem
+      Caption = 'File'
+      object Openlogfile1: TMenuItem
+        Caption = 'Open log file'
+        OnClick = Openlogfile1Click
+      end
+      object Closefile1: TMenuItem
+        Caption = 'Close log file'
+        OnClick = Closelogfile
+      end
+      object Exit1: TMenuItem
+        Caption = 'Exit'
+        OnClick = Exit1Click
+      end
+    end
+    object Options1: TMenuItem
+      Caption = 'Options'
+      object Gridsize1: TMenuItem
+        Caption = 'Grid size'
+        object N4px1: TMenuItem
+          Tag = 4
+          Caption = '4 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object N6px1: TMenuItem
+          Tag = 6
+          Caption = '6 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object N8px1: TMenuItem
+          Tag = 8
+          Caption = '8 px'
+          Checked = True
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object N10px1: TMenuItem
+          Tag = 10
+          Caption = '10 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object N12px1: TMenuItem
+          Tag = 12
+          Caption = '12 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object N14px1: TMenuItem
+          Tag = 14
+          Caption = '14 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object N16px1: TMenuItem
+          Tag = 16
+          Caption = '16 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object N20px1: TMenuItem
+          Tag = 20
+          Caption = '20 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+        object N24px1: TMenuItem
+          Tag = 24
+          Caption = '24 px'
+          GroupIndex = 3
+          RadioItem = True
+          OnClick = setGridSize
+        end
+      end
+      object Automatc1: TMenuItem
+        Caption = 'Automatic update'
+        object off1: TMenuItem
+          Caption = 'off'
+          Checked = True
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object N5sec1: TMenuItem
+          Tag = 5
+          Caption = '5 sec'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object N10sec1: TMenuItem
+          Tag = 10
+          Caption = '10 sec'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object N30sec1: TMenuItem
+          Tag = 30
+          Caption = '30 sec'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object N1min1: TMenuItem
+          Tag = 60
+          Caption = '1 min.'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object N2mins1: TMenuItem
+          Tag = 120
+          Caption = '2 mins'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+        object N5mins1: TMenuItem
+          Tag = 300
+          Caption = '5 mins'
+          GroupIndex = 2
+          RadioItem = True
+          OnClick = autoParseClick
+        end
+      end
+      object Prefixes1: TMenuItem
+        Caption = 'Unit system'
+        object DecimalKBMB1: TMenuItem
+          Caption = 'Decimal [KB, MB, ...]'
+          Checked = True
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = UnitFormatClick
+        end
+        object BinaryKiBMiB1: TMenuItem
+          Caption = 'Binary [KiB, MiB, ...]'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = UnitFormatClick
+        end
+      end
+      object DevSectSize: TMenuItem
+        Caption = 'Device sector size'
+        Hint = 'You can manually select the rescue device''s sector size. It is also automatically determined from the log file''s command line, if possible. This settings has minor influences in display.'
+        object DS512: TMenuItem
+          Tag = 512
+          Caption = 'Default (512 Bytes)'
+          Checked = True
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = DSClick
+        end
+        object DS2048: TMenuItem
+          Tag = 2048
+          Caption = 'Optical media (2048 Bytes)'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = DSClick
+        end
+        object DS4096: TMenuItem
+          Tag = 4096
+          Caption = 'Advanced Format (4096 Bytes)'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = DSClick
+        end
+        object DSCustom: TMenuItem
+          Caption = 'Custom...'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = DSClick
+        end
+      end
+    end
+    object Extras1: TMenuItem
+      Caption = 'Extras'
+      object Parse1: TMenuItem
+        Caption = 'Update now'
+        Hint = 'Updates the block view immediately'
+        OnClick = Parse1Click
+      end
+      object Clearlog1: TMenuItem
+        Caption = 'Clear log'
+        Hint = 'Clears the small log frame above the grid view'
+        OnClick = Clearlog1Click
+      end
+      object About1: TMenuItem
+        Caption = 'About'
+        Hint = 'Shows an information box about the program and its author'
+        OnClick = About1Click
+      end
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Filter = 'All files|*.*'
+    Options = [ofReadOnly, ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    left = 32
+  end
+  object updateTimer: TTimer
+    Enabled = False
+    OnTimer = Parse1Click
+    left = 96
+  end
+  object SaveDialog1: TSaveDialog
+    Filter = 'Text files|*.txt'
+    left = 64
+  end
+  object ApplicationEvents1: TApplicationProperties
+    OnShowHint = ApplicationEvents1ShowHint
+    left = 128
+  end
+end
